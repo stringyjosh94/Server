@@ -41,6 +41,7 @@ type RevInfo = {
     description: string;
     webclient?: boolean;
     wip?: boolean;
+    clientBranch?: string;
 }
 
 const revInfo: Record<string, RevInfo> = {
@@ -58,7 +59,12 @@ const revInfo: Record<string, RevInfo> = {
     },
     '254': {
         description: 'September 7, 2004',
-        wip: true
+        webclient: true
+    },
+    '377-wip': {
+        description: 'May 5, 2006',
+        wip: true,
+        clientBranch: '377'
     }
 };
 
@@ -83,7 +89,7 @@ async function main() {
     }
 
     if (!fs.existsSync('javaclient')) {
-        cloneRepo(javaRepo, 'javaclient', config.rev);
+        cloneRepo(javaRepo, 'javaclient', revInfo[config.rev]?.clientBranch ?? config.rev);
     }
 
     if (!fs.existsSync('engine/.env')) {
@@ -110,11 +116,17 @@ async function main() {
             name: 'Update Source',
             description: 'Pull the latest commits for all subprojects',
             value: 'update'
-        }, {
+        },
+        revInfo[config.rev]?.webclient ? {
             name: 'Run Web Client',
             description: 'Opens your browser to play using the modern web client (TypeScript)',
             value: 'web'
-        }, {
+        } : {
+            name: 'Run Web Client (unavailable)',
+            description: 'Not available in this version.',
+            value: ''
+        },
+        {
             name: 'Run Java Client',
             description: 'Opens the legacy Java applet to play using the original client',
             value: 'java'
@@ -175,7 +187,7 @@ async function promptConfig() {
     let choices = [];
     for (const [rev, info] of orderedRevs) {
         choices.push({
-            name: info.wip ? `${rev} (WIP)` : rev,
+            name: info.wip ? `${rev} (DEVELOPERS ONLY)` : rev,
             value: rev,
             description: info.description
         });
