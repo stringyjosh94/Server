@@ -3,7 +3,7 @@
 <p><strong>Note:</strong> Sometimes during installation you may see a message suggesting <code>apt update --fix-missing</code>. If that happens, run that command, then re-run the previous command that failed.</p>
 
 <p>This guide shows how to set up <strong>LostCityRS</strong> on <strong>Android using Termux and Ubuntu via proot-distro</strong>.<br>
-The original repository is private, so users can use these instructions as a reference to set up their own single-player server.</p>
+The repository is private, so users can use these instructions as a reference to set up their own single-player server.</p>
 
 <hr>
 
@@ -33,7 +33,7 @@ apt install -y nodejs
 </code></pre>
 
 <h3>Step 6: Clone the server (private repo reference)</h3>
-<pre><code>git clone https://github.com/LostCityRS/Server.git
+<pre><code>git clone https://github.com/yourusername/Server.git
 cd Server
 </code></pre>
 <p><strong>Note:</strong> This repository is private. Use this as a reference for your own setup.</p>
