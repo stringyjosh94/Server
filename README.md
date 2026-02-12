@@ -8,6 +8,24 @@
 This is a higher-level repository that links our other projects. You'll notice it's like home-rolled submodules (without commit references).  
 Github won't include submodules in web downloads, and we have a lot of users who end up clicking download zip.
 
+Note:
+This is a private fork of the original Lost City RS server, modified to run easily on Termux (Android).
+Other users cannot clone this repository, but they can read the README and use it as a reference to set up their own single-player server.
+
+Modifications in this fork include:
+
+Forking individual directories and linking them under this repository.
+
+Updating references to this fork.
+
+Editing start.ts to match this fork.
+
+Copying .env.example to .env and configuring the admin username and offline play settings.
+
+Setting up admin commands using :::help.
+
+This makes setup on Termux easier, avoiding complex SSH or file manager steps.
+
 ## Getting Started
 
 > [!IMPORTANT]
