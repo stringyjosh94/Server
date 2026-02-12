@@ -53,7 +53,7 @@ source ~/.bashrc
 
 <h2>Notes</h2>
 <ul>
-<li>Admin username in this fork: <code>Fearthewaken</code></li>
+<li>- Make sure to update the Admin username in the .env file before signing in</li>
 <li>Use <code>:::help</code> in-game for admin commands</li>
 <li>Setup is designed to avoid complex SSH or file manager steps on Termux</li>
 </ul>
