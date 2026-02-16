@@ -1,57 +1,36 @@
 #!/bin/sh
 
-echo "========================================"
-echo " LostCityRS Auto Setup & Start Script"
-echo "========================================"
-
-# Update & upgrade system packages
-echo "[*] Updating system packages..."
-apt update -y
-apt upgrade -y
-
-# Function to install packages if missing
-install_pkg() {
-    CMD="$1"
-    PKG="$2"
-    if ! command -v "$CMD" >/dev/null 2>&1; then
-        echo "[*] Installing $PKG..."
-        apt install -y "$PKG"
-    else
-        echo "[*] $PKG already installed."
-    fi
-}
-
-# Install required system packages
-install_pkg git git
-install_pkg curl curl
-install_pkg unzip unzip
-install_pkg java openjdk-17-jdk
-install_pkg wget wget
-install_pkg make build-essential
-install_pkg gcc build-essential
-
-# Ensure Bun is installed
-if [ -d "$HOME/.bun/bin" ]; then
-    export PATH="$HOME/.bun/bin:$PATH"
+if ! command -v git 2>&1 >/dev/null; then
+	echo You must install Git to proceed
+	exit 1
 fi
 
-if ! command -v bun >/dev/null 2>&1; then
-    echo "[*] Installing Bun..."
-    curl -fsSL https://bun.sh/install | bash
-    export PATH="$HOME/.bun/bin:$PATH"
+if ! command -v bun 2>&1 >/dev/null; then
+	if command -v npm 2>&1 >/dev/null; then
+		npm i -g bun
+	fi
+
+	if ! command -v bun 2>&1 >/dev/null; then
+		echo You must install Bun to proceed
+		exit 1
+	fi
 fi
 
-# Verify Java version
-jver=$(java -version 2>&1 | awk -F[\".] '/version/ {print $2}')
-if [ -z "$jver" ] || [ "$jver" -lt 17 ]; then
-    echo "[!] Java 17 or newer is required."
-    exit 1
+if ! command -v java 2>&1 >/dev/null; then
+	echo You must install Java 17 or newer to proceed
+	exit 1
 fi
 
-# Install project dependencies
-echo "[*] Installing project dependencies..."
+# todo: this can return a non-empty string and fail on macOS
+# "The operation couldn’t be completed. Unable to locate a Java Runtime.
+# Please visit http://www.java.com for information on installing Java."
+
+jver=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1)
+if [ "$jver" -lt 17 ]; then
+	echo You must install Java 17 or newer to proceed
+	echo And it must be your primary Java version!
+	exit 1
+fi
+
 bun install
-
-# Start LostCityRS server
-echo "[*] Starting LostCityRS server..."
-exec bun run start.ts
+bun run start.ts
